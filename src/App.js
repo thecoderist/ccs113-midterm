@@ -1,6 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
-
+// Importing necessary things to work the routes and importing my components to work my code into react 
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Dashboard from "./pages/Dashboard";
+import Projects from "./pages/Projects";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProjectDetail from "./components/ProjectDetail";
+import ProjectProvider from "./context/ProjectContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const location = useLocation(); // Get the current route location
 
