@@ -6,12 +6,14 @@ import axios from "axios";
 function Navbar() {
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(null);
+    const [key, setKey] = useState(0);  // Force re-render on logout
     const [key, setKey] = useState(0);  // ✅ Force re-render on logout
 
     // Fetch user from localStorage on load
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("currentUser"));
         setCurrentUser(user);
+    }, [key]);  //  Re-run useEffect when `key` changes
     }, [key]);  // ✅ Re-run useEffect when `key` changes
 
     // Handle Logout with Laravel API
@@ -29,6 +31,7 @@ function Navbar() {
                 {},
                 {
                     headers: {
+                        Authorization: `Bearer ${token}`,
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
                     },
