@@ -1,24 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
 
+
+const location = useLocation(); // Get the current route location
+
+//  Check if the current page is login or register
+const hideNavbar = location.pathname === "/login" || location.pathname === "/register";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+return (
+
+  // Creating project provider and making sure that if the navbar is in /login form or /register form then it will hide the navbar
+    <ProjectProvider>
+      <div className="app-container" style={{ minHeight: "100vh", background: "rgb(46, 44, 44)", color: "#ffffff" }}>
+        {/*  Conditionally render Navbar */}
+        {!hideNavbar && <Navbar />}
+      </div>
+    </ProjectProvider>
   );
 }
 
