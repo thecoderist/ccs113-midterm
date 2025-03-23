@@ -16,7 +16,7 @@ return (
         {!hideNavbar && <Navbar />}
 
 <div className="content" style={{ paddingTop: "2px" }}>
-  // Making Routes for dashboard end point or default end point for dashboard "/"
+  {/* // Making Routes for dashboard end point or default end point for dashboard "/" */}
           <Routes>
             <Route
               path="/"
@@ -35,7 +35,7 @@ return (
                 </ProtectedRoute>
               }
             />
-              // Routes for endpoint /projects with getting ID 
+              {/* // Routes for endpoint /projects with getting ID  */}
             <Route
               path="/projects/:id"
               element={
@@ -44,7 +44,7 @@ return (
                 </ProtectedRoute>
               }
             />
-              // Routes end point for /login in form and /register form
+              {/* // Routes end point for /login in form and /register form */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>
