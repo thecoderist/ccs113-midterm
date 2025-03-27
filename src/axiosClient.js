@@ -6,9 +6,10 @@ const axiosClient = axios.create({
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",   // Allow CORS
-      Authorization: Bearer ${localStorage.getItem("token")},  // Token authentication
+      Authorization: `Bearer ${localStorage.getItem("token")}`,  // Token authentication
     },
     
   });
 
 export default axiosClient;
+
