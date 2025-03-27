@@ -1,6 +1,3 @@
-import logo from './logo.svg';
-import './App.css';
-// Importing necessary things to work the routes and importing my components to work my code into react 
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -12,21 +9,20 @@ import ProjectDetail from "./components/ProjectDetail";
 import ProjectProvider from "./context/ProjectContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-const location = useLocation(); // Get the current route location
-
-//  Check if the current page is login or register
-const hideNavbar = location.pathname === "/login" || location.pathname === "/register";
 function App() {
-return (
+  const location = useLocation(); // Get the current route location
 
-  // Creating project provider and making sure that if the navbar is in /login form or /register form then it will hide the navbar
+  //  Check if the current page is login or register
+  const hideNavbar = location.pathname === "/login" || location.pathname === "/register";
+
+  return (
     <ProjectProvider>
       <div className="app-container" style={{ minHeight: "100vh", background: "rgb(46, 44, 44)", color: "#ffffff" }}>
+        
         {/*  Conditionally render Navbar */}
         {!hideNavbar && <Navbar />}
 
-<div className="content" style={{ paddingTop: "2px" }}>
-  {/* // Making Routes for dashboard end point or default end point for dashboard "/" */}
+        <div className="content" style={{ paddingTop: "2px" }}>
           <Routes>
             <Route
               path="/"
@@ -35,7 +31,6 @@ return (
                   <Dashboard />
                 </ProtectedRoute>
               }
-// Routes for endpoint /projects
             />
             <Route
               path="/projects"
@@ -45,7 +40,6 @@ return (
                 </ProtectedRoute>
               }
             />
-              {/* // Routes for endpoint /projects with getting ID  */}
             <Route
               path="/projects/:id"
               element={
@@ -54,7 +48,6 @@ return (
                 </ProtectedRoute>
               }
             />
-              {/* // Routes end point for /login in form and /register form */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>
