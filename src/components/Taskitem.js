@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+// making functions for task
 function TaskItem({ task, projectId, fetchTasks }) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
