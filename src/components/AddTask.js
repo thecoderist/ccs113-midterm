@@ -10,15 +10,15 @@ function AddTask({ projectId, fetchTasks }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-  
+
     try {
       const token = localStorage.getItem("token");
-      console.log("Token:", token);  // Log the token to verify it's valid
-      console.log("Project ID:", projectId);  // Log the project ID
-  
       const response = await axios.post(
         `http://127.0.0.1:8000/api/projects/${projectId}/tasks`,
-        { title, status },
+        {
+          title,
+          status,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -26,24 +26,13 @@ function AddTask({ projectId, fetchTasks }) {
           },
         }
       );
-  
-      console.log("Task added:", response.data);  // Log the response
+
       dispatch({ type: "ADD_TASK", payload: response.data });
-      fetchTasks();
+      fetchTasks(); // Refresh the task list
       setTitle("");
       setStatus("pending");
-  
     } catch (error) {
       console.error("Error adding task:", error);
-  
-      // Log the full response details
-      if (error.response) {
-        console.log("Error status:", error.response.status);
-        console.log("Error data:", error.response.data);
-        console.log("Error headers:", error.response.headers);
-      } else {
-        console.log("Error message:", error.message);
-      }
     }
   };
 
