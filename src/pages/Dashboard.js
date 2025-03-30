@@ -16,25 +16,33 @@ function Dashboard() {
   }
 
   const totalProjects = projects.length;
-  
-  // Count tasks by status
+
+  const normalizeStatus = (status) => {
+    return status.toLowerCase().replace(" ", "_");  // e.g., "In Progress" -> "in_progress"
+  };
+
+
   const totalTasks = projects.reduce((acc, project) => acc + (project.tasks?.length || 0), 0);
+  
   const completedTasks = projects.reduce(
-    (acc, project) => acc + (project.tasks?.filter(task => task.status === "completed").length || 0),
+    (acc, project) => acc + (project.tasks?.filter(task => normalizeStatus(task.status) === "completed").length || 0),
     0
   );
+
   const pendingTasks = projects.reduce(
-    (acc, project) => acc + (project.tasks?.filter(task => task.status === "pending").length || 0),
+    (acc, project) => acc + (project.tasks?.filter(task => normalizeStatus(task.status) === "pending").length || 0),
     0
   );
+
   const inProgressTasks = projects.reduce(
-    (acc, project) => acc + (project.tasks?.filter(task => task.status === "in_progress").length || 0),
+    (acc, project) => acc + (project.tasks?.filter(task => normalizeStatus(task.status) === "in_progress").length || 0),
     0
   );
 
   return (
     <div className="container mt-4">
       <h2 className="text-light">Dashboard</h2>
+
       <div className="row">
         <div className="col-md-3">
           <div className="card bg-dark text-white mb-3">
@@ -44,6 +52,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
         <div className="col-md-3">
           <div className="card bg-primary text-white mb-3">
             <div className="card-body">
@@ -52,6 +61,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
         <div className="col-md-3">
           <div className="card bg-warning text-dark mb-3">
             <div className="card-body">
@@ -60,6 +70,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
         <div className="col-md-3">
           <div className="card bg-success text-white mb-3">
             <div className="card-body">
@@ -90,4 +101,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
