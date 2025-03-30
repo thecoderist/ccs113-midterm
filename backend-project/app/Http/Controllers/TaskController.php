@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -43,20 +44,27 @@ class TaskController extends Controller
     // Update a task
     public function update(Request $request, $projectId, $taskId)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'status' => 'required|in:pending,in_progress,completed',
-        ]);
+        $task = Task::findOrFail($taskId);
     
-        $task = Task::where('project_id', $projectId)->findOrFail($taskId);
+        // Normalize the status casing
+        $statusMap = [
+            "pending" => "Pending",
+            "in_progress" => "In Progress",
+            "completed" => "Completed"
+        ];
+        $status = $statusMap[strtolower(str_replace("_", " ", $request->input('status')))] ?? $request->input('status');
     
         $task->update([
-            'title' => $request->title,
-            'status' => $request->status,
+            'title' => $request->input('title'),
+            'status' => $status,  
         ]);
     
-        return response()->json($task);
+        return response()->json([
+            'message' => 'Task updated successfully',
+            'task' => $task
+        ]);
     }
+    
 
     // Delete a task
     public function destroy($projectId, $taskId)
