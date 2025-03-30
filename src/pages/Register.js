@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios"; // Install axios: npm install axios
+import axios from "axios"; 
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -16,7 +15,7 @@ function Register() {
 const handleRegister = async (e) => {
   e.preventDefault();
   try {
-    const response = await axios.post("/api/register", {
+    const response = await axios.post("http://127.0.0.1:8000/api/register", {
       name,
       email,
       password,
