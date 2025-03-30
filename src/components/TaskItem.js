@@ -1,21 +1,43 @@
 import React, { useState } from "react";
 import axios from "axios";
-// making functions for taskses
+
 function TaskItem({ task, projectId, fetchTasks }) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [status, setStatus] = useState(task.status);
 
+  const formatStatus = (status) => {
+    switch (status.toLowerCase()) {  // Make it case-insensitive
+      case "pending":
+        return "pending";
+      case "in_progress":
+        return "in_progress";
+      case "completed":
+        return "completed";
+      default:
+        return status;  
+    }
+  };
+
   const handleEdit = async () => {
     try {
       const token = localStorage.getItem("token");
-
-      // Send only title and status in the PUT request
+  
       const payload = {
         title,
-        status,
+        status:
+          status === "pending"
+            ? "Pending"
+            : status === "in_progress"
+            ? "In Progress"
+            : status === "completed"
+            ? "Completed"
+            : status, 
       };
-
+  
+      console.log("Updating Task:", task.id);
+      console.log("Payload:", payload);
+  
       await axios.put(
         `http://127.0.0.1:8000/api/projects/${projectId}/tasks/${task.id}`,
         payload,
@@ -26,11 +48,12 @@ function TaskItem({ task, projectId, fetchTasks }) {
           },
         }
       );
-
+  
       setIsEditing(false);
-      fetchTasks();  // Refresh the task list
+      fetchTasks(); 
     } catch (error) {
       console.error("Error updating task:", error);
+      console.log("Error data:", error.response?.data);
     }
   };
 
@@ -38,12 +61,15 @@ function TaskItem({ task, projectId, fetchTasks }) {
     try {
       const token = localStorage.getItem("token");
 
+      console.log("Deleting Task ID:", task.id);  
+
       await axios.delete(
         `http://127.0.0.1:8000/api/projects/${projectId}/tasks/${task.id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log("Task deleted successfully!");
       fetchTasks();
     } catch (error) {
       console.error("Error deleting task:", error);
@@ -76,7 +102,7 @@ function TaskItem({ task, projectId, fetchTasks }) {
       ) : (
         <div>
           <h5>{task.title}</h5>
-          <p>Status: {task.status}</p>
+          <p>Status: {formatStatus(task.status)}</p>
           <button
             className="btn btn-secondary mx-1"
             onClick={() => setIsEditing(true)}
@@ -93,4 +119,3 @@ function TaskItem({ task, projectId, fetchTasks }) {
 }
 
 export default TaskItem;
-
