@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
-    //Get all tasks for a project
+    // Get all tasks for a project
     public function index($projectId)
     {
         $project = Project::find($projectId);
@@ -26,18 +24,31 @@ class TaskController extends Controller
     // Create a new task
     public function store(Request $request, $projectId)
     {
+   
+        \Log::info('Incoming Task Data:', $request->all());
+
+     
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'status' => 'required|in:pending,in_progress,completed',
+            'status' => 'required|string',
         ]);
-    
+
+      
+        $statusMap = [
+            "pending" => "Pending",
+            "in_progress" => "In Progress",
+            "completed" => "Completed"
+        ];
+
+        $normalizedStatus = $statusMap[strtolower($validated['status'])] ?? $validated['status'];
+
         $project = Project::findOrFail($projectId);
-    
+
         $task = $project->tasks()->create([
             'title' => $validated['title'],
-            'status' => $validated['status'],
+            'status' => $normalizedStatus,   
         ]);
-    
+
         return response()->json(['message' => 'Task created successfully', 'task' => $task], 201);
     }
 
@@ -45,26 +56,31 @@ class TaskController extends Controller
     public function update(Request $request, $projectId, $taskId)
     {
         $task = Task::findOrFail($taskId);
-    
-        // Normalize the status casing
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'status' => 'required|string',
+        ]);
+
+      
         $statusMap = [
             "pending" => "Pending",
             "in_progress" => "In Progress",
             "completed" => "Completed"
         ];
-        $status = $statusMap[strtolower(str_replace("_", " ", $request->input('status')))] ?? $request->input('status');
-    
+        
+        $normalizedStatus = $statusMap[strtolower($validated['status'])] ?? $validated['status'];
+
         $task->update([
-            'title' => $request->input('title'),
-            'status' => $status,  
+            'title' => $validated['title'],
+            'status' => $normalizedStatus,   
         ]);
-    
+
         return response()->json([
             'message' => 'Task updated successfully',
             'task' => $task
         ]);
     }
-    
 
     // Delete a task
     public function destroy($projectId, $taskId)
