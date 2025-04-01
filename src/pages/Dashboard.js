@@ -18,7 +18,7 @@ function Dashboard() {
   const totalProjects = projects.length;
 
   const normalizeStatus = (status) => {
-    return status.toLowerCase().replace(" ", "_");  // e.g., "In Progress" -> "in_progress"
+    return status.toLowerCase().replace(" ", "_");  // that will match my database, "In Progress" -> "in_progress"
   };
 
 
